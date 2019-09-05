@@ -1,0 +1,38 @@
+{
+  "name": "likemusic/yandex-fleet-taxi-lead-repository-google-spreadsheet",
+  "description": "Monitor leads in google spreadsheet and register new in https://fleet.taxi.yandex.ru/",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "proprietary",
+  "require": {
+    "php": "^7.3",
+    "google/apiclient": "^2.0",
+    "likemusic/yandex-fleet-taxi-lead-repository": "*",
+    "likemusic/yandex-fleet-taxi-client": "*"
+  },
+  "authors": [
+    {
+      "name": "Valerij Ivashchenko",
+      "email": "likemusicdev@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Likemusic\\YandexFleetTaxi\\LeadRepository\\GoogleSpreadsheet\\": "src/",
+      "Likemusic\\YandexFleetTaxi\\LeadRepository\\GoogleSpreadsheet\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:likemusic/yandex-fleet-taxi-lead-repository.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:likemusic/yandex-fleet-taxi-client.git"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "^8"
+  }
+}
