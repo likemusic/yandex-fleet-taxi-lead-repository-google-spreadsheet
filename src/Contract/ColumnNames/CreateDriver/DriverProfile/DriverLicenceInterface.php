@@ -1,6 +1,6 @@
 <?php
 
-namespace Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Contract\ColumnIndex\DriverProfile;
+namespace Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Contract\ColumnNames\CreateDriver\DriverProfile;
 
 interface DriverLicenceInterface
 {
@@ -11,5 +11,4 @@ interface DriverLicenceInterface
 
     const SERIES = 'prava-seria';
     const NUMBER = 'prava-nomer';
-
 }

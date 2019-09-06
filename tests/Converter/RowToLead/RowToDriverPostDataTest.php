@@ -6,7 +6,7 @@ use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Converter\RowToLe
 use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Tests\Converter\Fixture;
 use PHPUnit\Framework\TestCase;
 
-class RowToDriverPostDataTest extends TestCase
+class RowToDriverPostDataTest extends Base
 {
     public function testConvert()
     {
@@ -24,16 +24,6 @@ class RowToDriverPostDataTest extends TestCase
         $this->assertIsArray($driverPostData['driver_profile']);
 
         //$this->assertEquals($expectedDriverPostData, $driverPostData);
-    }
-
-    private function getTestHeaders()
-    {
-        return Fixture::HEADERS;
-    }
-
-    private function getTestRow()
-    {
-        return Fixture::ROW;
     }
 
     private function getExpectedDriverPostData()

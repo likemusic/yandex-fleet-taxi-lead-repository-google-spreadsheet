@@ -8,7 +8,7 @@ use Likemusic\YandexFleetTaxiClient\Contracts\PostDataKey\CreateDriver\DriverPro
 use Likemusic\YandexFleetTaxiClient\Contracts\PostDataKey\CreateDriver\DriverProfileInterface;
 use Likemusic\YandexFleetTaxiClient\Contracts\PostDataKey\CreateDriverInterface;
 use Likemusic\YandexFleetTaxiClient\Contracts\References\DriverStatus\IdInterface as WorkStatusIdInterface;
-use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Contract\ColumnIndex\DriverProfile\DriverLicenceInterface as DriverLicenceColumnInterface;
+use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Contract\ColumnNames\CreateDriver\DriverProfile\DriverLicenceInterface as DriverLicenceColumnInterface;
 
 class RowToDriverPostData extends Base
 {

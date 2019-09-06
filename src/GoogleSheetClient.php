@@ -3,28 +3,43 @@
 namespace Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet;
 
 use Google_Service_Sheets;
+use Google_Service_Sheets_Sheet;
 use Google_Service_Sheets_ValueRange;
+use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Contract\GoogleSheetClientInterface;
+use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Contract\ColumnNames\ProcessingInterface as ProcessingColumnNamesInterface;
 
-class GoogleSheetClient
+class GoogleSheetClient implements GoogleSheetClientInterface
 {
     /**
      * @var Google_Service_Sheets
      */
     private $googleServiceSheets;
 
+
     public function __construct(Google_Service_Sheets $googleServiceSheets)
     {
         $this->googleServiceSheets = $googleServiceSheets;
     }
 
-    public function getNotProcessedRows(string $spreadsheetId)
+    public function getHeadersRow(string $spreadsheetId)
     {
-        $statusColumnCellsValues = $this->getStatusColumnCellsValues($spreadsheetId);
+        $range = 'LeadsFromTilda!1:1';
 
-        return $this->getNotProcessedRowsByColumn($spreadsheetId, $statusColumnCellsValues);
+        return $this->getRangeValues($spreadsheetId, $range)[0];
     }
 
-    public function updateRowStatus($spreadsheetId, $rowIndex, $leadStatus, $statusMessage = null)
+    public function getNotProcessedRows(string $spreadsheetId, $headersRow = null)
+    {
+        if (!$headersRow) {
+            $headersRow = $this->getHeadersRow($spreadsheetId);
+        }
+
+        $statusColumnCellsValues = $this->getStatusColumnCellsValues($spreadsheetId, $headersRow);
+
+        return $this->getNotProcessedRowsByStatusColumnCellsValues($spreadsheetId, $statusColumnCellsValues);
+    }
+
+    public function updateRowStatus(string $spreadsheetId, $rowIndex, $leadStatus, $statusMessage = null)
     {
         $values = [
             [$leadStatus, $statusMessage]
@@ -48,82 +63,106 @@ class GoogleSheetClient
         $this->googleServiceSheets->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
     }
 
-    private function getStatusColumnCellsValues($spreadsheetId)
+    private function getStatusColumnCellsValues($spreadsheetId, $headersRow): array
     {
-        $statusColumnRows = $this->getStatusColumnRows($spreadsheetId);
+        $statusColumnRowsValues = $this->getStatusColumnRows($spreadsheetId, $headersRow);
 
-        return $this->columnRowsToCells($statusColumnRows);
-    }
-
-    private function columnRowsToCells($columnRows)
-    {
-        $cells = [];
-
-        foreach ($columnRows as $columnRow) {
-            $cells[] = $columnRow[0];
+        if (!$statusColumnRowsValues) {
+            return [];
         }
 
-        return $cells;
+        return $this->columnRowsValuesToCellsValues($statusColumnRowsValues);
     }
 
-    private function getStatusColumnRows($spreadsheetId)
+    private function columnRowsValuesToCellsValues($columnRowsValues)
     {
-        $range = 'LeadsFromTilda!Y:Y';
+        $cellsValues = [];
 
-        $response = $this->getRangeValues($spreadsheetId, $range);
+        foreach ($columnRowsValues as $columnRow) {
+            $cellsValues[] = isset($columnRow[0]) ? $columnRow[0]: null;
+        }
 
-        return $response->getValues();
+        return $cellsValues;
     }
 
-    private function getRangeValues($spreadsheetId, $range)
+    private function getStatusColumnRows($spreadsheetId, $headersRow)
     {
-        return $this->getRange($spreadsheetId, $range)->getValues();
+        $statusColumnIndex = $this->getStatusColumnIndex($headersRow);
+        $statusColumnIndex++;
+        $range = "LeadsFromTilda!R2C{$statusColumnIndex}:C{$statusColumnIndex}";
+
+        return $this->getRangeValues($spreadsheetId, $range);
     }
 
-    private function getRange($spreadsheetId, $range)
+    private function getStatusColumnIndex($headersRow): int
+    {
+        $statusColumnHeader = ProcessingColumnNamesInterface::STATUS;
+
+        return array_search($statusColumnHeader, $headersRow);
+    }
+
+    private function getRangeValues($spreadsheetId, $range): array
+    {
+        $values = $this->getRange($spreadsheetId, $range)->getValues();
+
+        return $values ?? [];
+    }
+
+    private function getRange($spreadsheetId, $range): Google_Service_Sheets_ValueRange
     {
         return $this->googleServiceSheets->spreadsheets_values->get($spreadsheetId, $range);
     }
 
-    private function getNotProcessedRowsByColumn($spreadsheetId, $statusColumnCellsValues)
+    private function getNotProcessedRowsByStatusColumnCellsValues($spreadsheetId, $statusColumnCellsValues)
     {
-        $notProcessedRowsIndexes = $this->getNotProcessedRowsIndexed($statusColumnCellsValues);
+        $sheetId = 'LeadsFromTilda';
+        $dataRowsCount = $this->getDataRowsCount($spreadsheetId, $sheetId);
 
-        return $this->getRowsByRowsIndexes($spreadsheetId, $notProcessedRowsIndexes);
+        $notProcessedRowsNumbers = $this->getNotProcessedRowsNumbers($dataRowsCount, $statusColumnCellsValues);
+
+        if (!$notProcessedRowsNumbers) {
+            return [];
+        }
+
+        return $this->getRowsByRowsIndexes($spreadsheetId, $notProcessedRowsNumbers);
     }
 
-    private function getRowsByRowsIndexes($spreadsheetId, $notProcessedRowsIndexes)
+    private function getDataRowsCount(string $spreadsheetId, string $sheetId)
+    {
+        $range = "{$sheetId}!A2:A";
+        $values = $this->getRangeValues($spreadsheetId, $range);
+
+        return count($values);
+    }
+
+    private function getRowsByRowsIndexes($spreadsheetId, $notProcessedRowsNumbers)
     {
         $rows = [];
 
-        foreach ($notProcessedRowsIndexes as $rowIndex) {
-            $rows[$rowIndex] = $this->getRowByIndex($spreadsheetId, $rowIndex);
+        foreach ($notProcessedRowsNumbers as $rowNumber) {
+            $rows[$rowNumber] = $this->getRowByNumber($spreadsheetId, $rowNumber);
         }
 
         return $rows;
     }
 
-    private function getRowByIndex($spreadsheetId, $rowIndex)
+    private function getRowByNumber($spreadsheetId, $rowNumber)
     {
-        $range = "LeadsFromTilda!{$rowIndex}:{$rowIndex}";
+        $range = "LeadsFromTilda!{$rowNumber}:{$rowNumber}";
 
-        return $this->getRangeValues($spreadsheetId, $range);
+        return $this->getRangeValues($spreadsheetId, $range)[0];
     }
 
-    private function getNotProcessedRowsIndexed($statusColumnCellsValues)
+    private function getNotProcessedRowsNumbers($dataRowsCount, $statusColumnCellsValues)
     {
-        $unprocessedRowsIndexes = [];
+        $unprocessedRowsNumbers = [];
 
-        $count = count($statusColumnCellsValues);
-
-        for($i=0;  $i < $count; $i++) {
-            $cellValue = $statusColumnCellsValues[$i];
-
-            if (!$cellValue) {
-                $unprocessedRowsIndexes[] = $i;
+        for ($i=0; $i < $dataRowsCount; $i++) {
+            if (!isset($statusColumnCellsValues[$i])) {
+                $unprocessedRowsNumbers[] = $i+2;//Numbers is 1-based + 1 header row
             }
         }
 
-        return $unprocessedRowsIndexes;
+        return $unprocessedRowsNumbers;
     }
 }

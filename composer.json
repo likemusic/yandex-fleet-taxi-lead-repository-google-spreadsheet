@@ -6,6 +6,8 @@
   "license": "proprietary",
   "require": {
     "php": "^7.3",
+    "ext-json": "*",
+
     "google/apiclient": "^2.0",
     "likemusic/yandex-fleet-taxi-lead-repository": "*",
     "likemusic/yandex-fleet-taxi-client": "*"

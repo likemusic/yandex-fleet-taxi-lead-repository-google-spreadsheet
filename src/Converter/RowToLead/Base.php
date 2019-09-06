@@ -18,7 +18,7 @@ class Base
 
     protected function getValueByRowName($rowNames, $row, $columnName)
     {
-        $index = array_search($rowNames, $columnName);
+        $index = array_search($columnName, $rowNames);
 
         return $row[$index];
     }
