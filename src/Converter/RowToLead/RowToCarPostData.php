@@ -8,18 +8,20 @@ use Likemusic\YandexFleetTaxiClient\Contracts\PostDataKey\CreateCar\CargoHoldDim
 
 class RowToCarPostData extends Base
 {
-    public function convert(array $headers, array $row): array
+    public function convert(array $headers, array $row, string $parkId): array
     {
         $defaultValues = $this->getDefaultValues();
         $mappedValues = $this->getMappedValues($headers, $row);
-        $calculatedValues = $this->getCalculatedValues();
+        $calculatedValues = $this->getCalculatedValues($headers, $row, $parkId);
 
         return array_replace_recursive($defaultValues, $mappedValues, $calculatedValues);
     }
 
-    private function getCalculatedValues()
+    private function getCalculatedValues(array $headers, array $row, string $parkId)
     {
-        return [];//todo
+        return [
+            CreateCarInterface::PARK_ID => $parkId,
+        ];//todo
     }
 
     private function getDefaultValues()
@@ -36,14 +38,14 @@ class RowToCarPostData extends Base
             CreateCarInterface::CARRYING_CAPACITY => null,
             CreateCarInterface::CATEGORIES => [],
             CreateCarInterface::CHAIRS => [],
-            CreateCarInterface::CHASSIS => null,
+//            CreateCarInterface::CHASSIS => null,
             CreateCarInterface::COLOR => 'Черный',//todo
             CreateCarInterface::LOG_TIME => 350, //todo: what is it?
 //            CreateCarInterface::MODEL => null,
 //            CreateCarInterface::NUMBER => null,
 //            CreateCarInterface::PARK_ID => null,
             CreateCarInterface::PERMIT => null,
-//            CreateCarInterface::REGISTRATION_CERT => null,
+            CreateCarInterface::REGISTRATION_CERT => '1111111',
             CreateCarInterface::RENTAL => null,
             CreateCarInterface::STATUS => 'working',//todo
             CreateCarInterface::TARIFFS => [],
