@@ -56,7 +56,7 @@ class RowToDriverPostData extends Base
 //            DriverProfileInterface::LAST_NAME => null,
 //            DriverProfileInterface::MIDDLE_NAME => null,
 //            DriverProfileInterface::PHONES => null,
-            DriverProfileInterface::PROVIDERS => null,
+            DriverProfileInterface::PROVIDERS => ['yandex'],
             DriverProfileInterface::WORK_RULE_ID => 'a6cb3fbe61a54ba28f8f8b5e35b286db',//todo
 //            DriverProfileInterface::WORK_STATUS => WorkStatusIdInterface::WORKING,
 
