@@ -52,7 +52,7 @@ class RowToDriverPostData extends Base
             DriverProfileInterface::EMAIL => null,
             DriverProfileInterface::FIRE_DATE => null,
 //            DriverProfileInterface::FIRST_NAME => null,
-            DriverProfileInterface::HIRE_DATE => null,
+            DriverProfileInterface::HIRE_DATE => '2019-09-01',
 //            DriverProfileInterface::LAST_NAME => null,
 //            DriverProfileInterface::MIDDLE_NAME => null,
 //            DriverProfileInterface::PHONES => null,
