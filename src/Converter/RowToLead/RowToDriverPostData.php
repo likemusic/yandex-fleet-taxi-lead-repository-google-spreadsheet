@@ -170,7 +170,7 @@ class RowToDriverPostData extends Base
         $series = $this->getValueByRowName($rowNames, $row, DriverLicenceColumnInterface::SERIES);
         $number = $this->getValueByRowName($rowNames, $row, DriverLicenceColumnInterface::NUMBER);
 
-        return "{$series}{$number}";
+        return "{$number}";
     }
 
     private function getDriverPostDataDriverProfileProviders($row)
