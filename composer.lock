@@ -618,12 +618,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:likemusic/yandex-fleet-taxi-client.git",
-                "reference": "5d0c373f851a4f546cf658296c6f695b6dcb3771"
+                "reference": "62e09034cf0319b40b97f8e23162748e8393d2a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/likemusic/yandex-fleet-taxi-client/zipball/5d0c373f851a4f546cf658296c6f695b6dcb3771",
-                "reference": "5d0c373f851a4f546cf658296c6f695b6dcb3771",
+                "url": "https://api.github.com/repos/likemusic/yandex-fleet-taxi-client/zipball/62e09034cf0319b40b97f8e23162748e8393d2a9",
+                "reference": "62e09034cf0319b40b97f8e23162748e8393d2a9",
                 "shasum": ""
             },
             "require": {
@@ -664,7 +664,7 @@
                 "source": "https://github.com/likemusic/yandex-fleet-taxi-client/tree/master",
                 "issues": "https://github.com/likemusic/yandex-fleet-taxi-client/issues"
             },
-            "time": "2019-09-05T14:20:31+00:00"
+            "time": "2019-09-06T18:27:48+00:00"
         },
         {
             "name": "likemusic/yandex-fleet-taxi-lead-repository",

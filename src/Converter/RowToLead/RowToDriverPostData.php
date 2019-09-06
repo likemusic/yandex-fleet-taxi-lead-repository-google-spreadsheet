@@ -56,7 +56,13 @@ class RowToDriverPostData extends Base
 //            DriverProfileInterface::PHONES => null,
             DriverProfileInterface::PROVIDERS => null,
             DriverProfileInterface::WORK_RULE_ID => 'a6cb3fbe61a54ba28f8f8b5e35b286db',//todo
-            DriverProfileInterface::WORK_STATUS => WorkStatusIdInterface::WORKING,
+//            DriverProfileInterface::WORK_STATUS => WorkStatusIdInterface::WORKING,
+
+            DriverProfileInterface::BANK_ACCOUNTS => [],
+            DriverProfileInterface::EMERGENCY_PERSON_CONTACTS => [],
+            DriverProfileInterface::IDENTIFICATIONS => [],
+            DriverProfileInterface::PRIMARY_STATE_REGISTRATION_NUMBER => null,
+            DriverProfileInterface::TAX_IDENTIFICATION_NUMBER => null,
         ];
     }
 
