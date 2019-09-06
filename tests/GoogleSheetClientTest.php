@@ -75,7 +75,6 @@ class GoogleSheetClientTest extends TestCase
         return [2 => Fixture::ROW, 5 => Fixture::ROW];
     }
 
-
     private function getExpectedHeadersRow()
     {
         return Fixture::HEADERS;

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53dbc93c7faa4c05bf8633a3c2f37df9",
+    "content-hash": "214b03b06d0142ddf9043e1377a338ea",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -672,12 +672,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:likemusic/yandex-fleet-taxi-lead-repository.git",
-                "reference": "f5b2f2129c21541909fe00f5d5159c0f01539752"
+                "reference": "37979733c2f24de3bd280cf241dfb6099e668df0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/likemusic/yandex-fleet-taxi-lead-repository/zipball/f5b2f2129c21541909fe00f5d5159c0f01539752",
-                "reference": "f5b2f2129c21541909fe00f5d5159c0f01539752",
+                "url": "https://api.github.com/repos/likemusic/yandex-fleet-taxi-lead-repository/zipball/37979733c2f24de3bd280cf241dfb6099e668df0",
+                "reference": "37979733c2f24de3bd280cf241dfb6099e668df0",
                 "shasum": ""
             },
             "require": {
@@ -703,20 +703,20 @@
                 "source": "https://github.com/likemusic/yandex-fleet-taxi-lead-repository/tree/master",
                 "issues": "https://github.com/likemusic/yandex-fleet-taxi-lead-repository/issues"
             },
-            "time": "2019-09-03T10:01:09+00:00"
+            "time": "2019-09-06T15:04:15+00:00"
         },
         {
             "name": "monolog/monolog",
-            "version": "1.24.0",
+            "version": "1.25.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266"
+                "reference": "70e65a5470a42cfec1a7da00d30edb6e617e8dcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
-                "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/70e65a5470a42cfec1a7da00d30edb6e617e8dcf",
+                "reference": "70e65a5470a42cfec1a7da00d30edb6e617e8dcf",
                 "shasum": ""
             },
             "require": {
@@ -781,7 +781,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2018-11-05T09:00:11+00:00"
+            "time": "2019-09-06T13:49:17+00:00"
         },
         {
             "name": "padraic/humbug_get_contents",
@@ -4400,7 +4400,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3"
+        "php": "^7.3",
+        "ext-json": "*"
     },
     "platform-dev": []
 }

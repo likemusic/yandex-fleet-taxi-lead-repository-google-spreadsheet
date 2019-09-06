@@ -3,6 +3,7 @@
 namespace Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet;
 
 use Likemusic\YandexFleetTaxi\LeadRepository\Contract\LeadRepositoryInterface;
+use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Converter\RowToLead as RowToLeadConverter;
 
 class LeadRepository implements LeadRepositoryInterface
 {
@@ -30,9 +31,11 @@ class LeadRepository implements LeadRepositoryInterface
 
     public function getNewLeads()
     {
-        $rows = $this->getNotProcessedRows($this->spreadsheetId);
+        $spreadsheetId = $this->spreadsheetId;
+        $headersRow = $this->getHeadersRow($spreadsheetId);
+        $rows = $this->getNotProcessedRows($spreadsheetId);
 
-        return $this->convertRowsToLeads($rows);
+        return $this->convertRowsToLeads($headersRow, $rows);
     }
 
     private function getNotProcessedRows($spreadsheetId)
@@ -40,26 +43,40 @@ class LeadRepository implements LeadRepositoryInterface
         return $this->googleSheetClient->getNotProcessedRows($spreadsheetId);
     }
 
-    private function convertRowsToLeads($rows)
+    private function convertRowsToLeads(array $headersRow, array $rows)
     {
         $leads = [];
 
-        foreach ($rows as $row) {
-            $leads[] = $this->convertRowToLead($row);
+        foreach ($rows as $rowIndex => $row) {
+            $leads[$rowIndex] = $this->convertRowToLead($headersRow, $row, $rowIndex);
         }
 
         return $leads;
     }
 
-    private function convertRowToLead($row)
+    private function getHeadersRow(string $spreadsheetId)
     {
-        return $this->rowToLeadConverter->convert($row);
+        return $this->googleSheetClient->getHeadersRow($spreadsheetId);
+    }
+
+    private function convertRowToLead(array $headersRow, array $row, int $rowIndex)
+    {
+        return $this->rowToLeadConverter->convert($headersRow, $row, $rowIndex);
     }
 
     public function updateLeadStatus(string $leadId, string $leadStatus, string $statusMessage = null)
     {
-        $rowIndex = $this->getRowIndexByLeadId($leadId);
+        $rowNumber = $leadId;
         $spreadsheetId = $this->spreadsheetId;
-        $this->updateRowStatus($spreadsheetId, $rowIndex, $leadStatus, $statusMessage);
+        $this->updateRowStatus($spreadsheetId, $rowNumber, $leadStatus, $statusMessage);
+    }
+
+    private function updateRowStatus(
+        string $spreadsheetId,
+        int $rowNumber,
+        string $leadStatus,
+        string $statusMessage = null
+    ) {
+        $this->googleSheetClient->updateRowStatusAndMessage($spreadsheetId, $rowNumber, $leadStatus, $statusMessage);
     }
 }

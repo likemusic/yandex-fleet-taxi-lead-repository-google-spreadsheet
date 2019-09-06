@@ -2,7 +2,7 @@
 
 namespace Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Converter;
 
-use Likemusic\YandexFleetTaxi\LeadRepository\Contract\Lead;
+use Likemusic\YandexFleetTaxi\LeadRepository\Lead;
 use Likemusic\YandexFleetTaxi\LeadRepository\Contract\LeadInterface;
 use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Converter\RowToLead\RowToDriverPostData as RowToDriverPostDataConverter;
 use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Converter\RowToLead\RowToCarPostData as RowToCarPostDataConverter;
@@ -28,13 +28,13 @@ class RowToLead
     }
 
 
-    public function convert(array $row): LeadInterface
+    public function convert($headersRow, array $row, $rowIndex): LeadInterface
     {
         $lead = new Lead();
 
-        $id = $this->getIdByRow($row);
-        $driverPostData = $this->getDriverPostDataByRow($row);
-        $carPostData = $this->getCarPostDataByRow($row);
+        $id = $rowIndex;
+        $driverPostData = $this->getDriverPostDataByRow($headersRow, $row);
+        $carPostData = $this->getCarPostDataByRow($headersRow, $row);
 
         return $lead
             ->setId($id)
@@ -42,13 +42,13 @@ class RowToLead
             ->setCarPostData($carPostData);
     }
 
-    private function getDriverPostDataByRow($row)
+    private function getDriverPostDataByRow($headersRow, $row)
     {
-        return $this->rowToDriverPostDataConverter->convert($row);
+        return $this->rowToDriverPostDataConverter->convert($headersRow, $row);
     }
 
-    private function getCarPostDataByRow($row)
+    private function getCarPostDataByRow($headersRow, $row)
     {
-        return $this->rowToCarPostDataConverter->convert($row);
+        return $this->rowToCarPostDataConverter->convert($headersRow, $row);
     }
 }

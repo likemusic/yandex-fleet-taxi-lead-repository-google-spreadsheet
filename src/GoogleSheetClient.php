@@ -175,7 +175,7 @@ class GoogleSheetClient implements GoogleSheetClientInterface
             return [];
         }
 
-        return $this->getRowsByRowsIndexes($spreadsheetId, $notProcessedRowsNumbers);
+        return $this->getRowsByRowsNumbers($spreadsheetId, $notProcessedRowsNumbers);
     }
 
     private function getDataRowsCount(string $spreadsheetId, string $sheetId)
@@ -186,7 +186,7 @@ class GoogleSheetClient implements GoogleSheetClientInterface
         return count($values);
     }
 
-    private function getRowsByRowsIndexes($spreadsheetId, $notProcessedRowsNumbers)
+    private function getRowsByRowsNumbers($spreadsheetId, $notProcessedRowsNumbers)
     {
         $rows = [];
 
