@@ -24,8 +24,10 @@ class RowToDriverPostData extends Base
 
     private function getDriverPostDataAccounts()
     {
+        $defaultBalanceLimit = self::DEFAULT_BALANCE_LIMIT;
+
         return [
-            AccountsInterface::BALANCE_LIMIT => self::DEFAULT_BALANCE_LIMIT,
+            AccountsInterface::BALANCE_LIMIT => "{$defaultBalanceLimit}",
         ];
     }
 
