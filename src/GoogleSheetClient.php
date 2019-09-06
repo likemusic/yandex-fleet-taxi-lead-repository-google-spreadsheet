@@ -39,15 +39,40 @@ class GoogleSheetClient implements GoogleSheetClientInterface
         return $this->getNotProcessedRowsByStatusColumnCellsValues($spreadsheetId, $statusColumnCellsValues);
     }
 
-    public function updateRowStatus(string $spreadsheetId, $rowIndex, $leadStatus, $statusMessage = null)
+    public function updateRowStatusAndMessage(string $spreadsheetId, $rowNumber, $leadStatus, $statusMessage = null, $headersRow = null)
     {
-        $values = [
-            [$leadStatus, $statusMessage]
-        ];
+        if (!$headersRow) {
+            $headersRow = $this->getHeadersRow($spreadsheetId);
+        }
 
-        $range = "LeadsFromTilda!{$rowIndex}Y:{$rowIndex}Z";
+        $statusColumnNumber = $this->getStatusColumnNumber($headersRow);
+        $statusMessageColumnNumber = $this->getStatusMessageColumnNumber($headersRow);
 
-        $this->setRangeValues($spreadsheetId, $range, $values);
+        $sheetId = 'LeadsFromTilda';
+        $this->setCellValue($spreadsheetId, $sheetId, $rowNumber, $statusColumnNumber, $leadStatus);
+
+        //todo: update by batch
+        if ($statusMessage) {
+            $this->setCellValue($spreadsheetId, $sheetId, $rowNumber, $statusMessageColumnNumber, $statusMessage);
+        }
+    }
+
+    private function getStatusMessageColumnNumber($headersRow)
+    {
+        $statusColumnHeader = ProcessingColumnNamesInterface::STATUS_MESSAGE;
+
+        return $this->getColumnNumber($headersRow, $statusColumnHeader);
+    }
+
+    private function setCellValue($spreadsheetId, $sheetId, $rowNumber, $columnNumber, $value)
+    {
+        $cellRange = $this->getCellRange($sheetId, $rowNumber, $columnNumber);
+        $this->setRangeValues($spreadsheetId, $cellRange, [[$value]]);
+    }
+
+    public function getCellRange($sheetId, $rowNumber, $columnNumber)
+    {
+        return "{$sheetId}!R{$rowNumber}C{$columnNumber}";
     }
 
     private function setRangeValues($spreadsheetId, $range, $values)
@@ -98,7 +123,33 @@ class GoogleSheetClient implements GoogleSheetClientInterface
     {
         $statusColumnHeader = ProcessingColumnNamesInterface::STATUS;
 
-        return array_search($statusColumnHeader, $headersRow);
+        return $this->getColumnIndex($headersRow, $statusColumnHeader);
+    }
+
+    private function getColumnNumber($headersRow, $columnName)
+    {
+        $columnIndex = $this->getColumnIndex($headersRow, $columnName);
+
+        return ++$columnIndex;
+    }
+
+    private function getColumnIndex($headersRow, $columnName)
+    {
+        return array_search($columnName, $headersRow);
+    }
+
+    private function getStatusColumnNumber($headersRow): int
+    {
+        $statusColumnHeader = ProcessingColumnNamesInterface::STATUS;
+
+        return $this->getColumnNumber($headersRow, $statusColumnHeader);
+    }
+
+    private function getStatusMessageColumnIndex($headersRow): int
+    {
+        $statusColumnHeader = ProcessingColumnNamesInterface::STATUS_MESSAGE;
+
+        return $this->getColumnIndex($headersRow, $statusColumnHeader);
     }
 
     private function getRangeValues($spreadsheetId, $range): array

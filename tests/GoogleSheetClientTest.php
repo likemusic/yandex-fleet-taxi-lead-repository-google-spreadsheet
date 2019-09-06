@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\GoogleSheetClient;
 use Google_Service_Sheets;
 use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Google\AuthorizedClient;
+use Likemusic\YandexFleetTaxi\LeadRepository\GoogleSpreadsheet\Contract\LeadStatusInterface;
 
 class GoogleSheetClientTest extends TestCase
 {
@@ -53,6 +54,20 @@ class GoogleSheetClientTest extends TestCase
         $expectedNotProcessedRows = $this->getExpectedNotProcessedRows();
 
         $this->assertEquals($expectedNotProcessedRows, $notProcessedRows);
+    }
+
+    /**
+     * @param GoogleSheetClient $googleSheetClient
+     * @depends testInstantiation
+     */
+    public function testUpdateRowStatus(GoogleSheetClient $googleSheetClient)
+    {
+        $spreadsheetId = self::SPREADSHEET_ID;
+
+        $rowNumber = 2;
+        $leadStatus = LeadStatusInterface::PROCESSING;
+        $statusMessage = 'Test status message';
+        $googleSheetClient->updateRowStatusAndMessage($spreadsheetId, $rowNumber, $leadStatus, $statusMessage);
     }
 
     public function getExpectedNotProcessedRows()

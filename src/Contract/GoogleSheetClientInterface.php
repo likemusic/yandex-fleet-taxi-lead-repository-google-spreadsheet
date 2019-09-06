@@ -8,5 +8,5 @@ interface GoogleSheetClientInterface
 
     public function getNotProcessedRows(string $spreadsheetId);
 
-    public function updateRowStatus(string $spreadsheetId, $rowIndex, $leadStatus, $statusMessage = null);
+    public function updateRowStatusAndMessage(string $spreadsheetId, $rowNumber, $leadStatus, $statusMessage = null);
 }
