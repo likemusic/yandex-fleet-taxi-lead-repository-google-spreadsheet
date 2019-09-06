@@ -28,13 +28,13 @@ class RowToLead
     }
 
 
-    public function convert($headersRow, array $row, $rowIndex): LeadInterface
+    public function convert($headersRow, array $row, $rowIndex, $parkId): LeadInterface
     {
         $lead = new Lead();
 
         $id = $rowIndex;
         $driverPostData = $this->getDriverPostDataByRow($headersRow, $row);
-        $carPostData = $this->getCarPostDataByRow($headersRow, $row);
+        $carPostData = $this->getCarPostDataByRow($headersRow, $row, $parkId);
 
         return $lead
             ->setId($id)
@@ -47,8 +47,8 @@ class RowToLead
         return $this->rowToDriverPostDataConverter->convert($headersRow, $row);
     }
 
-    private function getCarPostDataByRow($headersRow, $row)
+    private function getCarPostDataByRow($headersRow, $row, $parkId)
     {
-        return $this->rowToCarPostDataConverter->convert($headersRow, $row);
+        return $this->rowToCarPostDataConverter->convert($headersRow, $row, $parkId);
     }
 }

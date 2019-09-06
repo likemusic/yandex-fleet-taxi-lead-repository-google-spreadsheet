@@ -51,7 +51,8 @@ class LeadRepositoryTest extends TestCase
         $googleSheetClient = $this->getTestGoogleSheetClient();
         $spreadsheetId = '1baxAq-otNeyKajWcIt7yQHq1oWyVDGHp54YbwRJszIw';
         $rowToLeadConverter = $this->getTestRowToLeadConverter();
-        $leadRepository = new LeadRepository($googleSheetClient, $spreadsheetId, $rowToLeadConverter);
+        $parkId = '8d40b7c41af544afa0499b9d0bdf2430';
+        $leadRepository = new LeadRepository($googleSheetClient, $spreadsheetId, $rowToLeadConverter, $parkId);
 
         return $leadRepository;
     }

@@ -18,24 +18,30 @@ class LeadRepository implements LeadRepositoryInterface
     private $spreadsheetId;
 
     /**
+     * @var string
+     */
+    private $parkId;
+    /**
      * @var RowToLeadConverter
      */
     private $rowToLeadConverter;
 
-    public function __construct(GoogleSheetClient $googleSheetClient, $spreadsheetId, RowToLeadConverter $rowToLeadConverter)
+    public function __construct(GoogleSheetClient $googleSheetClient, $spreadsheetId, RowToLeadConverter $rowToLeadConverter, string $parkId)
     {
         $this->googleSheetClient = $googleSheetClient;
         $this->spreadsheetId = $spreadsheetId;
         $this->rowToLeadConverter = $rowToLeadConverter;
+        $this->parkId = $parkId;
     }
 
     public function getNewLeads()
     {
         $spreadsheetId = $this->spreadsheetId;
+        $parkId = $this->parkId;
         $headersRow = $this->getHeadersRow($spreadsheetId);
         $rows = $this->getNotProcessedRows($spreadsheetId);
 
-        return $this->convertRowsToLeads($headersRow, $rows);
+        return $this->convertRowsToLeads($headersRow, $rows, $parkId);
     }
 
     private function getNotProcessedRows($spreadsheetId)
@@ -43,12 +49,12 @@ class LeadRepository implements LeadRepositoryInterface
         return $this->googleSheetClient->getNotProcessedRows($spreadsheetId);
     }
 
-    private function convertRowsToLeads(array $headersRow, array $rows)
+    private function convertRowsToLeads(array $headersRow, array $rows, string $parkId)
     {
         $leads = [];
 
         foreach ($rows as $rowIndex => $row) {
-            $leads[$rowIndex] = $this->convertRowToLead($headersRow, $row, $rowIndex);
+            $leads[$rowIndex] = $this->convertRowToLead($headersRow, $row, $rowIndex, $parkId);
         }
 
         return $leads;
@@ -59,9 +65,9 @@ class LeadRepository implements LeadRepositoryInterface
         return $this->googleSheetClient->getHeadersRow($spreadsheetId);
     }
 
-    private function convertRowToLead(array $headersRow, array $row, int $rowIndex)
+    private function convertRowToLead(array $headersRow, array $row, int $rowIndex, $parkId)
     {
-        return $this->rowToLeadConverter->convert($headersRow, $row, $rowIndex);
+        return $this->rowToLeadConverter->convert($headersRow, $row, $rowIndex, $parkId);
     }
 
     public function updateLeadStatus(string $leadId, string $leadStatus, string $statusMessage = null)

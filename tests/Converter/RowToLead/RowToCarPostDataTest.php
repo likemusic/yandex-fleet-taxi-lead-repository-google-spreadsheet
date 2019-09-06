@@ -13,7 +13,8 @@ class RowToCarPostDataTest extends Base
         $testHeaders = $this->getTestHeaders();
         $testRow = $this->getTestRow();
         $converter = new RowToCarPostDataConverter();
-        $carPostData = $converter->convert($testHeaders, $testRow);
+        $parkId = '8d40b7c41af544afa0499b9d0bdf2430';
+        $carPostData = $converter->convert($testHeaders, $testRow, $parkId);
         //$expectedDriverPostData = $this->getExpectedDriverPostData();
 
         $this->assertIsArray($carPostData);
