@@ -117,12 +117,21 @@ class RowToDriverPostData extends Base
 
     private function getDriverPostDataDriverProfilePhones($rowNames, $row)
     {
+        $rawPhone = $this->getValueByRowName($rowNames, $row, DriverProfileColumnNameInterface::PHONE);
+        $sanitizedPhone = $this->sanitizePhone($rawPhone);
+
         return [
-            $this->getValueByRowName($rowNames, $row, DriverProfileColumnNameInterface::PHONE),
-//            $this->getValueByRowName($rowNames, $row, DriverProfileColumnNameInterface::PHONE_2),
+            $sanitizedPhone,
 //TODO: Нужно ли добавлять второй номер к номерам яндекса? Через админку на данный момент можно добавить только один,
 //но api позволяет добавить несколько.
         ];
+    }
+
+    private function sanitizePhone(string $rawPhone)
+    {
+        $phone = preg_replace('/[^0-9]/', '', $rawPhone);
+
+        return "+{$phone}";
     }
 
     private function getDriverLicencePostData($rowNames, $row)
